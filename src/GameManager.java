@@ -9,7 +9,7 @@ public class GameManager {
     public UI ui;
     public int screenHeight = 600;
     public int screenWidth = 600;
-    private final int FPS = 1000;
+    private final int FPS = 60;
     public int currentFPS;
     public Block currentBlock;
     public Block currentDescriptionBlock;

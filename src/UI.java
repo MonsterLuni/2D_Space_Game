@@ -41,6 +41,10 @@ public class UI extends JPanel {
     }
     public void drawDepthLayer(Graphics g, int height){
         for(int i = 0; i < worldDepth; i++){
+            if(gm.ml.leftMousePressed && checkHitBoxOfRectangle(getWidth() - (10 + 25),height + 50 + (15 * i),10,5,gm.mml.currentMousePoint)){
+                gm.currentDepth = Math.abs(i - worldDepth);
+            }
+            System.out.println(gm.currentDepth);
             g.drawRect(getWidth() - (10 + 25),height + 50 + (15 * i),10,5);
         }
     }
