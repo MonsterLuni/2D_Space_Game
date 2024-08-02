@@ -30,8 +30,8 @@ public class MouseListener implements java.awt.event.MouseListener {
             }
             if(!gm.ui.onMenu){
                 Point point = screenCoordinatesToWorldCoordinates(e.getPoint());
-                if(point.x >= 0 && point.y >= 0 && point.x < gm.ui.worldWidth && point.y < gm.ui.worldHeight){
-                    gm.ui.blocks[gm.currentDepth][point.x][point.y] = gm.currentBlock;
+                if(point.x >= 0 && point.y >= 0 && point.x < gm.worldWidth && point.y < gm.worldHeight){
+                    gm.blocks[gm.currentDepth][point.x][point.y] = gm.currentBlock;
                 }
             }
 

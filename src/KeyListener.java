@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class KeyListener implements java.awt.event.KeyListener {
@@ -8,20 +7,14 @@ public class KeyListener implements java.awt.event.KeyListener {
     }
     @Override
     public void keyTyped(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_1) {
-            System.out.println("typed 1");
-            gm.ml.currentColor = Color.GREEN;
-        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_1) {
-            System.out.println("typed 1");
-            gm.ml.currentColor = Color.GREEN;
+        if(e.getKeyCode() == KeyEvent.VK_F9) {
+            gm.saveWorld();
         }
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
 
