@@ -7,7 +7,6 @@ public class MouseListener implements java.awt.event.MouseListener {
     Point pressPoint;
     Point offsetPoint;
     GameManager gm;
-    Color currentColor = Color.RED;
     public MouseListener(GameManager gm) {
         this.gm = gm;
     }
@@ -30,11 +29,16 @@ public class MouseListener implements java.awt.event.MouseListener {
             }
             if(!gm.ui.onMenu){
                 Point point = screenCoordinatesToWorldCoordinates(e.getPoint());
-                if(point.x >= 0 && point.y >= 0 && point.x < gm.worldWidth && point.y < gm.worldHeight){
+                if(point.x >= 0 && point.y >= 0 && point.x < gm.worldWidth && point.y < gm.worldHeight && gm.currentBlock != null){
                     gm.blocks[gm.currentDepth][point.x][point.y] = gm.currentBlock;
                 }
             }
-
+        }
+        else if(e.getButton() == MouseEvent.BUTTON3 && gm.currentBlock != null){
+            gm.currentBlock = null;
+        }
+        else if(e.getButton() == MouseEvent.BUTTON3 && gm.ui.menu){
+            gm.ui.menu = false;
         }
     }
 

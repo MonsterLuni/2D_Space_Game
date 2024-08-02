@@ -26,7 +26,7 @@ public class GameManager {
     public int worldDepth = 5;
     public static final int MENUSTATE = 0;
     public static final int GAMESTATE = 1;
-    public int currentState = MENUSTATE;
+    public int currentState = GAMESTATE;
     public boolean debug = true;
     public Block[][][] blocks = new Block[worldDepth][worldWidth][worldHeight];
     public HashMap<String,Block[]> section = new HashMap<>();
@@ -76,7 +76,8 @@ public class GameManager {
         try{
             String sector = "Natural";
             section.put("Natural", new Block[]{
-                    new Block(ImageIO.read(new FileInputStream("src/assets/natural/dirt.png")),"Dirt","Dirty",sector,0)
+                    new Block(ImageIO.read(new FileInputStream("src/assets/natural/dirt.png")),"Dirt","Literally very dirty",sector,0),
+                    new Block(ImageIO.read(new FileInputStream("src/assets/natural/stone.png")),"Stone","Common in the Ground",sector,0)
             });
             sector = "Food";
             section.put("Food",new Block[]{
@@ -92,7 +93,12 @@ public class GameManager {
         for(int k = 0; k < worldDepth; k++) {
             for (int i = 0; i < worldWidth; i++) {
                 for (int j = 0; j < worldHeight; j++) {
-                    blocks[k][i][j] = section.get("Natural")[0];
+                    if (k == 0) {
+                        blocks[k][i][j] = section.get("Natural")[1];
+                    }
+                    else if (k == 1) {
+                        blocks[k][i][j] = section.get("Natural")[0];
+                    }
                 }
             }
         }

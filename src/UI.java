@@ -17,7 +17,6 @@ public class UI extends JPanel {
     public UI(GameManager gm){
         this.gm = gm;
         gm.loadWorld();
-        gm.currentBlock = gm.section.get("Natural")[0];
     }
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -37,7 +36,20 @@ public class UI extends JPanel {
     }
     private void drawGameState(Graphics g){
         drawMap(g);
+        if(!onMenu){
+            drawPlacementShadow(g);
+        }
         drawBuildingUI(g);
+    }
+    private void drawPlacementShadow(Graphics g){
+        if(gm.currentBlock != null){
+            g.setColor(Color.GREEN);
+            Point point = gm.ml.screenCoordinatesToWorldCoordinates(gm.mml.currentMousePoint);
+            g.drawRect(point.x * tileSize + offsetX ,point.y * tileSize + offsetY, tileSize * gm.currentBlock.width, tileSize * gm.currentBlock.height);
+            Color transparentGreen = new Color(0,255,0,100);
+            g.setColor(transparentGreen);
+            g.fillRect(point.x * tileSize + offsetX + 1,point.y * tileSize + offsetY + 1, tileSize * gm.currentBlock.width - 1, tileSize * gm.currentBlock.height - 1);
+        }
     }
     private void drawDebug(Graphics g){
         g.setColor(Color.RED);
@@ -56,11 +68,16 @@ public class UI extends JPanel {
     }
     private void drawDepthLayer(Graphics g, int height){
         for(int i = 0; i < gm.worldDepth; i++){
+            g.setColor(Color.WHITE);
             if(checkHitBoxOfRectangle(getWidth() - (10 + 25),height + 50 + (15 * i),10,5,gm.mml.currentMousePoint)){
                 onMenu = true;
                 if (gm.ml.leftMousePressed) {
                     gm.currentDepth = Math.abs(i - (gm.worldDepth - 1));
                 }
+            }
+            if(gm.currentDepth == Math.abs(i - (gm.worldDepth - 1))){
+                g.setColor(Color.RED);
+                g.drawRect(getWidth() - (10 + 25) + 1,height + 50 + (15 * i) + 1,10 - 1,5 - 1);
             }
             g.drawRect(getWidth() - (10 + 25),height + 50 + (15 * i),10,5);
         }
