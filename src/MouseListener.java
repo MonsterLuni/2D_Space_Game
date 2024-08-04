@@ -14,7 +14,6 @@ public class MouseListener implements java.awt.event.MouseListener {
     public void mouseClicked(MouseEvent e) {
 
     }
-
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON2 && !gm.ui.onMenu) {
@@ -27,21 +26,22 @@ public class MouseListener implements java.awt.event.MouseListener {
             if(gm.mml.hoverUIStart){
                 gm.ui.menu = !gm.ui.menu;
             }
-            if(!gm.ui.onMenu){
-                Point point = screenCoordinatesToWorldCoordinates(e.getPoint());
-                if(point.x >= 0 && point.y >= 0 && point.x < gm.worldWidth && point.y < gm.worldHeight && gm.currentBlock != null){
-                    gm.blocks[gm.currentDepth][point.x][point.y] = gm.currentBlock;
-                }
+            if (!gm.ui.menu && gm.currentPerson != null){
+                System.out.println("Sending Person Number " + gm.currentPerson + " to " + gm.screenCoordinatesToWorldCoordinates(gm.mml.currentMousePoint));
+                gm.currentPerson.walkToPoint(gm.screenCoordinatesToWorldCoordinates(gm.mml.currentMousePoint));
             }
-        }
-        else if(e.getButton() == MouseEvent.BUTTON3 && gm.currentBlock != null){
+            else if(!gm.ui.onMenu){
+                Point point = gm.screenCoordinatesToWorldCoordinates(e.getPoint());
+                gm.mml.placeBlock(point);
+            }
+        } else if (e.getButton() == MouseEvent.BUTTON3 && gm.currentPerson != null) {
+            gm.currentPerson = null;
+        } else if (e.getButton() == MouseEvent.BUTTON3 && gm.currentBlock != null) {
             gm.currentBlock = null;
-        }
-        else if(e.getButton() == MouseEvent.BUTTON3 && gm.ui.menu){
+        } else if (e.getButton() == MouseEvent.BUTTON3 && gm.ui.menu) {
             gm.ui.menu = false;
         }
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON2) {
@@ -51,17 +51,11 @@ public class MouseListener implements java.awt.event.MouseListener {
             leftMousePressed = false;
         }
     }
-
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
 
-    }
-    public Point screenCoordinatesToWorldCoordinates(Point point) {
-        return new Point((point.x - gm.ui.offsetX) / gm.ui.tileSize, (point.y - gm.ui.offsetY) / gm.ui.tileSize);
     }
 }

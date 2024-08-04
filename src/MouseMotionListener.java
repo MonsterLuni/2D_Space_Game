@@ -17,12 +17,9 @@ public class MouseMotionListener implements java.awt.event.MouseMotionListener {
         }
         else if (gm.ml.leftMousePressed  && !gm.ui.onMenu) {
                 Point point = screenCoordinatesToWorldCoordinates(e.getPoint());
-                if(point.x >= 0 && point.y >= 0 && point.x < gm.worldWidth && point.y < gm.worldHeight && gm.currentBlock != null){
-                    gm.blocks[gm.currentDepth][point.x][point.y] = gm.currentBlock;
-                }
+                placeBlock(point);
         }
     }
-
     @Override
     public void mouseMoved(MouseEvent e) {
         currentMousePoint = e.getPoint();
@@ -30,5 +27,11 @@ public class MouseMotionListener implements java.awt.event.MouseMotionListener {
 
     public Point screenCoordinatesToWorldCoordinates(Point point) {
         return new Point((point.x - gm.ui.offsetX) / gm.ui.tileSize, (point.y - gm.ui.offsetY) / gm.ui.tileSize);
+    }
+    public void placeBlock(Point point){
+        if(gm.currentBlock != null && point.x >= 0 && point.y >= 0 && point.x < gm.worldWidth && point.y < gm.worldHeight && gm.placable(point)){
+            gm.antimatterPlacer(point);
+            gm.blocks[gm.currentDepth][point.x][point.y] = gm.currentBlock;
+        }
     }
 }
