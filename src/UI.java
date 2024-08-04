@@ -95,12 +95,28 @@ public class UI extends JPanel {
         }
     }
     private void drawMap(Graphics g){
+        updateClosedTiles();
         for(int k = 0; k <= gm.currentDepth; k++){
             for(int i = 0; i < gm.worldWidth; i++){
                 for(int j = 0; j < gm.worldHeight; j++){
                     if(gm.blocks[k][i][j] != null) {
-                        g.drawImage(gm.blocks[k][i][j].image, i * tileSize + offsetX + 1, j * tileSize + offsetY + 1, tileSize * gm.blocks[k][i][j].width, tileSize * gm.blocks[k][i][j].height, null);
+                        if(gm.blocks[k][i][j] != gm.section.get("air")[0]){
+                            g.drawImage(gm.blocks[k][i][j].image, i * tileSize + offsetX + 1, j * tileSize + offsetY + 1, tileSize * gm.blocks[k][i][j].width, tileSize * gm.blocks[k][i][j].height, null);
+                        }
+                        if(gm.blocks[k][i][j].seen){
+                            //g.setColor(new Color(255,0,0,50));
+                            g.fillRect(i * tileSize + offsetX + 1, j * tileSize + offsetY + 1, tileSize, tileSize);
+                        }
                     }
+                }
+            }
+        }
+    }
+    private void updateClosedTiles(){
+        if (gm.currentPerson != null && gm.currentPerson.closedListed != null) {
+            for(Person.Node node: gm.currentPerson.closedListed){
+                if(node != null){
+                    gm.blocks[3][node.location.x][node.location.y].seen = true;
                 }
             }
         }

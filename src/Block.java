@@ -9,6 +9,7 @@ public class Block {
     public int width = 1;
     public int height = 1;
     public int[] placableDepth = new int[]{1};
+    public boolean seen;
     public Block(Image image, String name, String description,String sector, int id){
         this.image = image;
         this.name = name;

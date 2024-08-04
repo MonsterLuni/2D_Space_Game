@@ -95,6 +95,10 @@ public class GameManager {
                     new Block(ImageIO.read(new FileInputStream("src/assets/power/cable.png")),"Cable","Transportes Power",sector,0,new int[]{2}),
                     new Block(ImageIO.read(new FileInputStream("src/assets/power/reactor.png")),"Reactor","Produces Power",sector,0,5,4,new int[]{3}),
             });
+            sector = "air";
+            section.put("air",new Block[]{
+                    new Block(null,"air","air",sector,0),
+            });
         }catch (IOException e){
             System.out.println("File not found");
         }
@@ -104,7 +108,6 @@ public class GameManager {
             persons = new Person[2];
             persons[0] = new Person(this,ImageIO.read(new FileInputStream("src/assets/person/person.png")),new Point(0,0));
             persons[1] = new Person(this,ImageIO.read(new FileInputStream("src/assets/person/person.png")),new Point(9,9));
-            persons[0].walkToPoint(new Point(10,10));
             currentPerson = persons[0];
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -120,6 +123,8 @@ public class GameManager {
                     }
                     else if (k == 1) {
                         blocks[k][i][j] = section.get("Natural")[0];
+                    } else{
+                        blocks[k][i][j] = section.get("air")[0];
                     }
                 }
             }
@@ -156,7 +161,7 @@ public class GameManager {
         try{
             for(int i = 0; i < currentBlock.width; i++){
                 for(int j = 0; j < currentBlock.height; j++){
-                    if(blocks[currentDepth][point.x + i][point.y + j] != null){
+                    if(blocks[currentDepth][point.x + i][point.y + j] != section.get("air")[0]){
                         return false;
                     }
                 }

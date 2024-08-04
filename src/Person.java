@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class Person{
     GameManager gm;
@@ -13,6 +11,7 @@ public class Person{
     int amountOfNodes;
     Node[] openListed;
     Node[] closedListed;
+    int left,right,up,down;
 
     public Person(GameManager gm, Image image, Point location) {
         this.gm = gm;
@@ -45,25 +44,12 @@ public class Person{
                         int currentLocationX = Math.abs(c.location.x - currentGoal.x);
                         int currentLocationY = Math.abs(c.location.y - currentGoal.y);
 
-                        int left = Math.abs(c.location.x - 1 - currentGoal.x) + currentLocationY;
-                        int right = Math.abs(c.location.x + 1 - currentGoal.x) + currentLocationY;
-                        int up = currentLocationX + Math.abs(c.location.y - 1 - currentGoal.y);
-                        int down = currentLocationX + Math.abs(c.location.y + 1 - currentGoal.y);
-                        int result = Math.min(Math.min(left, right), Math.min(up, down));
+                        left = Math.abs(c.location.x - 1 - currentGoal.x) + currentLocationY;
+                        right = Math.abs(c.location.x + 1 - currentGoal.x) + currentLocationY;
+                        up = currentLocationX + Math.abs(c.location.y - 1 - currentGoal.y);
+                        down = currentLocationX + Math.abs(c.location.y + 1 - currentGoal.y);
+                        findRightWay(c);
 
-                        if (result == left) {
-                            openListed[i + 1] = new Node(c, new Point(c.location.x - 1, c.location.y),amountOfNodes);
-                            amountOfNodes++;
-                        } else if (result == right) {
-                            openListed[i + 1] = new Node(c, new Point(c.location.x + 1, c.location.y),amountOfNodes);
-                            amountOfNodes++;
-                        } else if (result == up) {
-                            openListed[i + 1] = new Node(c, new Point(c.location.x, c.location.y - 1),amountOfNodes);
-                            amountOfNodes++;
-                        } else if (result == down) {
-                            openListed[i + 1] = new Node(c, new Point(c.location.x, c.location.y + 1),amountOfNodes);
-                            amountOfNodes++;
-                        }
                         if (c.location.x == currentGoal.x && c.location.y == currentGoal.y) {
                             goalFound = true;
                             break;
@@ -75,6 +61,33 @@ public class Person{
             }
             System.out.println("Complete");
             walkWay(currentGoal);
+        }
+        public void findRightWay(Node c){
+            int result = Math.min(Math.min(left, right), Math.min(up, down));
+            if (result == left) {
+                addNodeToList(new Point(c.location.x - 1, c.location.y),amountOfNodes,c, "left");
+            } else if (result == right) {
+                addNodeToList(new Point(c.location.x + 1, c.location.y),amountOfNodes,c,"right");
+            } else if (result == up) {
+                addNodeToList(new Point(c.location.x, c.location.y - 1),amountOfNodes,c,"up");
+            } else{
+                addNodeToList(new Point(c.location.x, c.location.y + 1),amountOfNodes,c,"down");
+            }
+        }
+        public void addNodeToList(Point direction, int id, Node node, String directionString){
+            if (gm.blocks[3][direction.x][direction.y] == gm.section.get("air")[0]) {
+                openListed[id] = new Node(node, direction, amountOfNodes);
+                amountOfNodes++;
+            }
+            else{
+                switch (directionString){
+                    case "left" -> left = right + 1;
+                    case "right" -> right = left + 1;
+                    case "up" -> up = down + 1;
+                    case "down" -> down = up + 1;
+                }
+                findRightWay(node);
+            }
         }
         public void walkWay(Point goal){
             int i = amountOfNodes - 2;
@@ -106,6 +119,9 @@ public class Person{
         }
     }
     public static class Node{
+        Node before;
+        Point location;
+        int id;
         public Node(Node before, Point location, int id){
             this.location = location;
             this.before = before;
@@ -114,8 +130,5 @@ public class Person{
         public Node(Point location){
             this.location = location;
         }
-        Node before;
-        Point location;
-        int id;
     }
 }
